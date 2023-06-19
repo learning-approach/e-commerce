@@ -1,3 +1,5 @@
+import 'package:ecommerce/business_logics/bindings/auth_binding.dart';
+import 'package:ecommerce/business_logics/bindings/splash_binding.dart';
 import 'package:ecommerce/ui/views/auth/forget_password.dart';
 import 'package:ecommerce/ui/views/auth/login.dart';
 import 'package:ecommerce/ui/views/auth/registration.dart';
@@ -24,32 +26,27 @@ List<GetPage> getPages = [
   ),
   GetPage(
     name: splash,
-    page: () => const Splash(),
+    page: () => Splash(),
+    binding: SplashBinding(),
   ),
   GetPage(
     name: intro,
     page: () => const Onboarding(),
   ),
+  GetPage(name: login, page: () => Login(), binding: AuthBinding()),
   GetPage(
-    name: login,
-    page: () => Login(),
-  ),
-  GetPage(
-    name: registration,
-    page: () => Registration(),
-  ),
+      name: registration, page: () => Registration(), binding: AuthBinding()),
   GetPage(
     name: forgetPass,
     page: () => ForgetPassword(),
+    binding: AuthBinding(),
   ),
   GetPage(
     name: terms,
     page: () => TermCondition(),
   ),
- GetPage(
+  GetPage(
     name: bottomNav,
     page: () => BottomNavController(),
   ),
-
-
 ];

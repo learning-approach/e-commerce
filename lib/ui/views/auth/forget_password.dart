@@ -3,6 +3,9 @@ import 'package:ecommerce/ui/widgets/custom_button.dart';
 import 'package:ecommerce/ui/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import '../../../business_logics/controllers/auth_controller.dart';
 
 class ForgetPassword extends StatelessWidget {
   ForgetPassword({super.key});
@@ -51,8 +54,6 @@ class ForgetPassword extends StatelessWidget {
                       return 'enter a valid email address';
                     }
                   }, prefixIcon: Icons.email_outlined),
-                  
-                  
                   SizedBox(
                     height: 10,
                   ),
@@ -63,22 +64,19 @@ class ForgetPassword extends StatelessWidget {
                         'Continue',
                         () {
                           if (_formKey.currentState!.validate()) {
-                            print('Success');
+                            Get.find<AuthController>().forgetPassword(
+                                _emailController.text.trim(), context);
                           } else {
                             print('failed');
                           }
                         },
                       )),
-                 
-                  
-               
                 ],
               ),
             ),
           ),
         ),
       )),
-    
     );
   }
 }

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../business_logics/controllers/auth_controller.dart';
+
 class Login extends StatelessWidget {
   Login({super.key});
   TextEditingController _emailController = TextEditingController();
@@ -85,7 +87,10 @@ class Login extends StatelessWidget {
                         'Log in',
                         () {
                           if (_formKey.currentState!.validate()) {
-                            Get.toNamed(bottomNav);
+                            Get.find<AuthController>().login(
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                                context);
                           } else {
                             print('failed');
                           }
@@ -186,7 +191,6 @@ class Login extends StatelessWidget {
           ),
         ),
       )),
-    
     );
   }
 }

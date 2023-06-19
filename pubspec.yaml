@@ -35,13 +35,12 @@ dependencies:
   google_fonts: ^4.0.4 # google fonts
   intro_screen_onboarding_flutter: ^1.0.0 # intro
   salomon_bottom_bar: ^3.3.2 #for bottom nav
-
-  
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  firebase_core: ^2.14.0
+  firebase_auth: ^4.6.3
+  get_storage: ^2.1.1
+  cloud_firestore: ^4.8.1
+  
 
 dev_dependencies:
   flutter_test:

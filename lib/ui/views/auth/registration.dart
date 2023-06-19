@@ -1,3 +1,4 @@
+import 'package:ecommerce/business_logics/controllers/auth_controller.dart';
 import 'package:ecommerce/const/app_colors.dart';
 import 'package:ecommerce/ui/responsive/size_config.dart';
 import 'package:ecommerce/ui/route/route.dart';
@@ -106,7 +107,11 @@ class Registration extends StatelessWidget {
                         () {
                           if (_formKey.currentState!.validate() &&
                               _value.value == true) {
-                            print('Success');
+                            Get.find<AuthController>().signUp(
+                                _nameController.text,
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                                context);
                           } else {
                             print('failed');
                           }
