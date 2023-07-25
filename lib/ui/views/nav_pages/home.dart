@@ -1,6 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ecommerce/const/app_colors.dart';
 import 'package:ecommerce/model/products.dart';
+import 'package:ecommerce/services/firestore_db.dart';
+import 'package:ecommerce/ui/route/route.dart';
+import 'package:ecommerce/ui/widgets/custom_button.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -10,53 +16,165 @@ class Home extends StatelessWidget {
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-        child: GridView.builder(
-            itemCount: products.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.85),
-            itemBuilder: (_, index) {
-              return Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: AppColors.grayColor.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 4,
-                        offset: Offset(0, 3))
-                  ],
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.network(
-                      products[index].image.toString(),
-                      height: 100,
-                    ),
-                    Text(
-                      
-                      products[index].title.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
+        child: RefreshIndicator(
+          onRefresh: () => FirestoreDB().getProducts(),
+          child: FutureBuilder(
+            future: FirestoreDB().getProducts(),
+            builder: (_, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return GridView.builder(
+                      itemCount: snapshot.data!.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.85),
+                      itemBuilder: (_, index) {
+                        return InkWell(
+                          onTap: () => Get.toNamed(details,
+                              arguments: snapshot.data![index]),
+                          child: Ink(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: AppColors.grayColor.withOpacity(0.5),
+                                    spreadRadius: 2,
+                                    blurRadius: 4,
+                                    offset: Offset(0, 3))
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl: snapshot.data![index].thumbnail,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, progress) => Center(
+                                    child: CircularProgressIndicator(
+                                      value: progress.progress,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                                Text(
+                                  snapshot.data![index].title,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                Text(
+                                  '\$ ${snapshot.data![index].price.toString()}',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      });
+                } else {
+                  return Center(child: Text('something went wrong'));
+                }
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
 
+class DetailsScreen extends StatefulWidget {
+  Product data;
+  DetailsScreen({super.key, required this.data});
+
+  @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    print(widget.data.images);
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.favorite_outline))
+        ],
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+              height: 200,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: widget.data.images
+                    .map(
+                      (e) => Container(
+                        margin: EdgeInsets.only(top: 10, left: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                color: AppColors.mandarinColor, width: 5)),
+                        child: CachedNetworkImage(
+                          imageUrl: e,
+                          height: 100,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: CircularProgressIndicator(
+                              value: progress.progress,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
                       ),
-                    ),
-                    Text(
-                      '\$${products[index].price.toString()}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
+                    )
+                    .toList(),
+              )),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.data.title,
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
                 ),
-              );
-            }),
+                Text(
+                  widget.data.description,
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      color: AppColors.grayColor),
+                ),
+                Text(
+                  '\$ ${widget.data.price.toString()}',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.mandarinColor),
+                ),
+                customButton('Add to Cart', () {}),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

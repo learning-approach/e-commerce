@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/model/products.dart';
 import 'package:ecommerce/model/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -22,6 +23,14 @@ class FirestoreDB {
     await _firebaseFirestore
         .collection('users')
         .doc(user.email)
-        .update(user.toJson()).then((value) => Get.snackbar('Success', 'Updated Successfully.'));
+        .update(user.toJson())
+        .then((value) => Get.snackbar('Success', 'Updated Successfully.'));
   }
+ 
+  Future<List<Product>> getProducts()async{
+     final snapshot = await _firebaseFirestore.collection('products').get();
+     final productData =  snapshot.docs.map((e) => Product.fromSnapshot(e)).toList();
+    return productData;
+  }
+
 }

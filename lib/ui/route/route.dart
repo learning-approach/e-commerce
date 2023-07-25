@@ -4,6 +4,7 @@ import 'package:ecommerce/ui/views/auth/forget_password.dart';
 import 'package:ecommerce/ui/views/auth/login.dart';
 import 'package:ecommerce/ui/views/auth/registration.dart';
 import 'package:ecommerce/ui/views/bottom_nav_controller.dart';
+import 'package:ecommerce/ui/views/nav_pages/home.dart';
 import 'package:ecommerce/ui/views/not_found.dart';
 import 'package:ecommerce/ui/views/onboarding.dart';
 import 'package:ecommerce/ui/views/splash.dart';
@@ -18,6 +19,7 @@ const String registration = '/registration';
 const String forgetPass = '/forgetPass';
 const String terms = '/terms';
 const String bottomNav = '/bottomNav';
+const String details = '/details';
 
 List<GetPage> getPages = [
   GetPage(
@@ -48,5 +50,11 @@ List<GetPage> getPages = [
   GetPage(
     name: bottomNav,
     page: () => BottomNavController(),
+  ),
+  GetPage(
+    name: details,
+    page: () => DetailsScreen(
+      data: Get.arguments,
+    ),
   ),
 ];

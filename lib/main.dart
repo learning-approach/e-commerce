@@ -1,4 +1,3 @@
-import 'package:ecommerce/business_logics/bindings/auth_binding.dart';
 import 'package:ecommerce/const/app_strings.dart';
 import 'package:ecommerce/ui/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
