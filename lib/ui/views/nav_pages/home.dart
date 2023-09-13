@@ -72,6 +72,7 @@ class Home extends StatelessWidget {
                                 Text(
                                   snapshot.data![index].title,
                                   textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 13,
                                   ),

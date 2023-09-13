@@ -1,5 +1,6 @@
 import 'package:ecommerce/business_logics/bindings/auth_binding.dart';
 import 'package:ecommerce/business_logics/bindings/cart_binding.dart';
+import 'package:ecommerce/business_logics/bindings/checkout_binding.dart';
 import 'package:ecommerce/business_logics/bindings/favourite_binding.dart';
 import 'package:ecommerce/business_logics/bindings/splash_binding.dart';
 import 'package:ecommerce/ui/views/auth/forget_password.dart';
@@ -52,6 +53,7 @@ List<GetPage> getPages = [
   GetPage(name: bottomNav, page: () => BottomNavController(), bindings: [
     CartBinding(),
     FavouriteBinding(),
+    CheckoutBinding(),
   ]),
   GetPage(
     name: details,

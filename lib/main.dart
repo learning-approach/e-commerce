@@ -20,9 +20,9 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      statusBarColor: Colors.white, // Color for Android
+      statusBarColor: Colors.black, 
       statusBarBrightness:
-          Brightness.light // Dark == white status bar -- for IOS.
+          Brightness.light
       ));
   runApp(const MyApp());
 }

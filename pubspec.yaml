@@ -41,6 +41,8 @@ dependencies:
   get_storage: ^2.1.1
   cloud_firestore: ^4.8.1
   cached_network_image: ^3.2.3
+  flutter_bkash: ^0.2.0
+
  
   
 

@@ -110,5 +110,29 @@ class FirestoreDB {
         .delete()
         .then((value) => Get.snackbar('Success', 'Deleted Successfully.'));
   }
+  
+
+  Future<void> order(trxid,paymentId,merchantInvoiceNumber,customerMsisdn,executeTime, items,total) async {
+    final user = box.read('user');
+    await _firebaseFirestore
+        .collection('orders')
+        .doc()
+        .set({
+          'user_name': user['name'],
+          'user_email': user ['email'],
+          'trxid': trxid,
+          'paymentId': paymentId,
+          'merchantInvoiceNumber': merchantInvoiceNumber,
+          'customerMsisdn': customerMsisdn,
+          'executeTime': executeTime,
+          'items': FieldValue.arrayUnion(items),
+          'total': total,
+
+          
+        })
+        .then((value) => Get.rawSnackbar(message: 'Order placed successfully.'));
+  }
+
+  
 
 }

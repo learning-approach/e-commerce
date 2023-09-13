@@ -1,11 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/business_logics/controllers/cart_controller.dart';
+import 'package:ecommerce/business_logics/controllers/checkout_controller.dart';
+import 'package:ecommerce/const/app_strings.dart';
+import 'package:ecommerce/model/cart.dart';
 import 'package:ecommerce/services/firestore_db.dart';
+import 'package:ecommerce/ui/style/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Cart extends StatelessWidget {
   final controller = Get.find<CartController>();
+  final checkoutController = Get.find<CheckoutController>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +96,21 @@ class Cart extends StatelessWidget {
                     SizedBox(
                       width: 20,
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text('Checkout'))
+                    ElevatedButton(
+                        onPressed: () {
+                          List items = [];
+                          for (var i = 0; i < controller.items.length; i++) {
+                            Map productDetails = {
+                              'title': controller.items[i].title,
+                              'price': controller.items[i].price,
+                              'thumbnail': controller.items[i].thumbnail
+                            };
+                            items.add(productDetails);
+                          }
+                          checkoutController.checkout(
+                              context, controller.getTotal.toDouble(), items);
+                        },
+                        child: Text('Checkout'))
                   ],
                 ),
               ),
